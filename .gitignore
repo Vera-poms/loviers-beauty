@@ -3,9 +3,9 @@
 # dependencies
 /node_modules
 /.pnp
-<<<<<<< HEAD
+
 .pnp.js
-=======
+
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -32,17 +32,17 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
+
 
 # local env files
 .env*.local
 .env
-=======
+
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
->>>>>>> 94930c2 (Initial commit from Create Next App)
+
 
 # vercel
 .vercel
