@@ -1,9 +1,18 @@
-import Image from "next/image";
+import { Stack } from "@chakra-ui/react";
+import Display from "@/components/Display/Display";
+import Services from "@/components/Services/Services";
+import Footer from "@/components/Footer/Footer";
+
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      
-    </div>
+    <Stack
+    position="relative"
+    zIndex="10">
+      <Display />
+
+      <Services />
+      <Footer />
+    </Stack>
   );
 }
