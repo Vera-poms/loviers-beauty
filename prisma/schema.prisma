@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
@@ -11,4 +5,104 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+  OWNER
+}
+
+model User {
+  id               String            @id @default(cuid())
+  name             String?
+  email            String            @unique
+  emailVerified    DateTime?
+  role             Role      @default(USER)
+  accounts         Account[]
+  sessions         Session[]
+  appointmentForms AppointmentForm[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id           Int     @id @default(autoincrement())
+  userId       String
+  type         String
+  refreshToken String?
+  accessToken  String?
+  expiresAt    Int?
+  tokenType    String?
+  scope        String?
+  idToken      String?
+  sessionState String?
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model UploadService {
+  id            Int              @id @default(autoincrement())
+  image         String?
+  video         String?
+  title         String
+  description   String
+  braidingHours String
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id        Int            @id @default(autoincrement())
+  name      String
+  image     String?
+  serviceId Int
+  service   UploadService  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
+
+model BookAppointment {
+  id Int @id @default(autoincrement())
+
+  appointmentDate DateTime
+  appointmentTime DateTime
+  userDetails     AppointmentForm[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AppointmentForm {
+  id          Int     @id @default(autoincrement())
+  userId      String
+  name        String
+  phoneNumber String
+  email       String  @unique
+  notes       String?
+  image       String?
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  appointmentId   Int
+  bookAppointment BookAppointment @relation(fields: [appointmentId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }

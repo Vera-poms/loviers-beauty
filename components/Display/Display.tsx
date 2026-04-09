@@ -1,5 +1,6 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import 
 { Carousel, 
   IconButton, 
@@ -20,16 +21,16 @@ import {
 const items = Array.from({ length: 5 })
 
 const Display = () => {
-  const navigate = useNavigate()
+  const navigate = useRouter()
 
   const handleClick = () => {
-    navigate("/appointments")
+    navigate.push("/appointments/book")
   }
 
 
   return (
     <Carousel.Root
-      autoplay={{ delay: 100000 }}
+      autoplay={{ delay: 1000000 }}
       slideCount={items.length}
       mx="auto"
       w="100vw"

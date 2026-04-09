@@ -1,24 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
 import { Provider } from "@/components/ui/provider"
-import { montserrat, robotoSerif } from './font';
+import { montserrat } from './font';
+import { authClient } from '@/lib/auth/client'; 
+import { NeonAuthUIProvider } from '@neondatabase/auth/react';
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Loviers Beauty / LashnMore",
-  description: "Created by V",
+  description: "Beauty care booking",
 };
 
 export default function RootLayout({
@@ -29,14 +20,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased
-          ${montserrat.variable} ${robotoSerif.variable} ${montserrat.className} ${robotoSerif.className}`}
+        className={` antialiased
+          ${montserrat.variable}  ${montserrat.className} `}
         suppressHydrationWarning
       >
-        <Provider>
-          <Navbar />
-          {children}
-        </Provider>
+        <NeonAuthUIProvider
+        authClient={authClient as any} 
+        redirectTo="/account/settings"
+        emailOTP
+        >
+          <Provider>
+              {children}
+          </Provider>
+        </NeonAuthUIProvider>
       </body>
     </html>
   );
