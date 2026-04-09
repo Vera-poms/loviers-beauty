@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Flex, Text, Image, Heading, IconButton, Carousel, SimpleGrid } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Flex, Text, Image, Heading, IconButton, Carousel, Button } from '@chakra-ui/react';
 import { robotoSerif, montserrat } from '@/app/font';
 import { LuChevronLeft, LuChevronRight, LuPause, LuPlay } from 'react-icons/lu';
 
@@ -25,6 +26,8 @@ interface ServiceDetailsProps {
 }
 
 const ServiceDetails = ({ service, subcategories }: ServiceDetailsProps) => {
+  const [activeTab, setActiveTab] = useState<string>('all');
+
   return (
     <Box>
         <Carousel.Root
@@ -117,44 +120,28 @@ const ServiceDetails = ({ service, subcategories }: ServiceDetailsProps) => {
         </Box>
 
         <Box px="4" py="4">
-          <Heading
-            fontSize="xl"
-            fontFamily={robotoSerif.style.fontFamily}
-            mb="4"
-          >
-            Subcategories
-          </Heading>
-          <SimpleGrid columns={2} gap="4">
+          <Flex gap="2" overflowX="auto" pb="2">
+            <Button
+              size="sm"
+              variant={activeTab === 'all' ? 'solid' : 'outline'}
+              onClick={() => setActiveTab('all')}
+              fontFamily={montserrat.style.fontFamily}
+            >
+              All
+            </Button>
             {subcategories.map((sub) => (
-              <Box
+              <Button
                 key={sub.id}
-                borderRadius="lg"
-                overflow="hidden"
-                boxShadow="md"
-                bg="white"
-                cursor="pointer"
+                size="sm"
+                variant={activeTab === sub.name ? 'solid' : 'outline'}
+                onClick={() => setActiveTab(sub.name)}
+                fontFamily={montserrat.style.fontFamily}
+                whiteSpace="nowrap"
               >
-                {sub.image && (
-                  <Image
-                    src={sub.image}
-                    alt={sub.name}
-                    w="100%"
-                    h="120px"
-                    objectFit="cover"
-                  />
-                )}
-                <Box p="3">
-                  <Text
-                    fontWeight="bold"
-                    fontSize="sm"
-                    fontFamily={robotoSerif.style.fontFamily}
-                  >
-                    {sub.name}
-                  </Text>
-                </Box>
-              </Box>
+                {sub.name}
+              </Button>
             ))}
-          </SimpleGrid>
+          </Flex>
         </Box>
     </Box>
   )

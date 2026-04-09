@@ -8,14 +8,29 @@ async function seed() {
     { title: 'Extras', description: 'Additional beauty services', image: '/assets/4.png', braidingHours: '' },
   ];
 
+  const subcategoriesMap: Record<string, string[]> = {
+    'Braids': ['Box Braids', 'Cornrows', 'Knotless Braids', 'Twist Braids', 'Fulani Braids'],
+    'Training': ['Beginner', 'Intermediate', 'Advanced', 'Masterclass'],
+    'Lash': ['Classic Lashes', 'Volume Lashes', 'Hybrid Lashes', 'Mega Volume'],
+    'Extras': ['Hair Wash', 'Deep Conditioning', 'Scalp Treatment', 'Hair Coloring'],
+  };
+
   for (const category of categories) {
     const existing = await prisma.uploadService.findFirst({
       where: { title: category.title },
     });
 
     if (!existing) {
-      await prisma.uploadService.create({ data: category });
+      const service = await prisma.uploadService.create({ data: category });
       console.log(`Created: ${category.title}`);
+
+      const subs = subcategoriesMap[category.title] || [];
+      for (const subName of subs) {
+        await prisma.subcategory.create({
+          data: { name: subName, serviceId: service.id },
+        });
+      }
+      console.log(`  Added ${subs.length} subcategories`);
     } else {
       console.log(`Already exists: ${category.title}`);
     }

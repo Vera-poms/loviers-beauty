@@ -90,18 +90,13 @@ const Navbar = ({ onMenu }: NavbarProps) => {
                       {option.title === "Services" ? (
                         <>
                           <Collapsible.Root>
-                            <Collapsible.Trigger>
+                            <Collapsible.Trigger
+                              onClick={handleToggleServices}
+                              cursor="pointer"
+                              aria-label={showServices ? "Close services menu" : "Open services menu"}>
                               <Flex align="center" gap="2">
                                 <Text>{option.title}</Text>
-                                <IconButton 
-                                onClick={handleToggleServices} cursor="pointer"
-                                variant="ghost"
-                                size="sm"
-                                aria-label={showServices ? "Close services menu" : "Open services menu"}>
-                                
-                                  {showServices ? <LuChevronUp /> : <LuChevronDown />}
-                                  
-                                </IconButton>
+                                {showServices ? <LuChevronUp /> : <LuChevronDown />}
                               </Flex>
                             </Collapsible.Trigger>
                             <Collapsible.Content pl="4">
